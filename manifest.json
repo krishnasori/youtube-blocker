@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Night Blocker",
+  "version": "1.0",
+  "description": "Blocks YouTube daily from 10 PM to 7 AM.",
+  "permissions": [
+    "declarativeNetRequest",
+    "alarms"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
