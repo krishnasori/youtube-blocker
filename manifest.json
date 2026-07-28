@@ -5,9 +5,13 @@
   "description": "Blocks YouTube daily from 10 PM to 7 AM.",
   "permissions": [
     "declarativeNetRequest",
-    "alarms"
+    "alarms",
+    "tabs"
   ],
-  "background": {
+  "host_permissions":[
+    "*://*.youtube.com/*"
+  ],
+  "background" : {
     "service_worker": "background.js"
   }
 }

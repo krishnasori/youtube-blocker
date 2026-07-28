@@ -1,14 +1,12 @@
 const YOUTUBE_RULE_ID = 1;
 
 function checkTimeAndUpdateRule() {
-  const hours = new Date().getHours();
-  
-  // 22 is 10 PM, 7 is 7 AM. 
-  // Block if the hour is 22 or 23, OR if it is between 0 and 6.
-  const shouldBlock = hours >= 22 || hours < 7;
+   const hours = new Date().getHours();
+  const shouldBlock = hours>=22 || hours < 7; 
 
   if (shouldBlock) {
     chrome.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds: [YOUTUBE_RULE_ID],
       addRules: [{
         id: YOUTUBE_RULE_ID,
         priority: 1,
@@ -17,8 +15,12 @@ function checkTimeAndUpdateRule() {
           urlFilter: "||youtube.com",
           resourceTypes: ["main_frame"]
         }
-      }],
-      removeRuleIds: [YOUTUBE_RULE_ID] // Remove first to prevent duplicate ID errors
+      }]
+    }, () => {
+      // Force any already-open YouTube tabs to re-navigate NOW
+      chrome.tabs.query({ url: "*://*.youtube.com/*" }, (tabs) => {
+        tabs.forEach((tab) => chrome.tabs.reload(tab.id));
+      });
     });
   } else {
     chrome.declarativeNetRequest.updateDynamicRules({
